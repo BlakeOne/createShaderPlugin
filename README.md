@@ -2,6 +2,11 @@
 - createShaderPlugin is a function that encapuslates the process of creating a shader plugin for pixi.js.
 - Your plugin will be optimized for sprites which don't need to filter an existing texture.
 
+### Update ###
+- It is now possible to create plugins even after the renderer has already been created.
+- - If you pass a renderer to createShaderPlugin it will be updated automatically with the new plugin!
+- - If you call createShaderPlugin before creating the app/renderer, then you can ignore this final parmeter.
+
 ### Demos ###
 - Please refer to the CodePen [demo](https://codepen.io/Tazy/pen/PjvPGQ) for usage guidelines.
 
