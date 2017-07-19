@@ -128,9 +128,7 @@ function createShaderPlugin (name, vertShader, fragShader, uniformDefaults) {
         quad.vao.draw(this.renderer.gl.TRIANGLES, 6, 0);
     };
 
-    // register and assign ShaderPlugin
+    // register ShaderPlugin
     PIXI.WebGLRenderer.registerPlugin(name, ShaderPlugin);
     PIXI.CanvasRenderer.registerPlugin(name, PIXI.CanvasSpriteRenderer);
-
-    Object.assign(PIXI.extras, ShaderPlugin);
 }
