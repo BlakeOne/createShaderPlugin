@@ -1,6 +1,6 @@
-function createShaderPlugin (name, vertShader, fragShader, uniformDefaults) {
-    var ShaderPlugin = function (renderer) {
-        PIXI.ObjectRenderer.call(this, renderer);
+function createShaderPlugin (name, vertShader, fragShader, uniformDefaults, renderer) {
+    var ShaderPlugin = function (_renderer) {
+        PIXI.ObjectRenderer.call(this, _renderer);
 
         if (!vertShader) {
             this.vertShader = [
@@ -25,13 +25,13 @@ function createShaderPlugin (name, vertShader, fragShader, uniformDefaults) {
 
         this.fragShader = '#define GLSLIFY 1\n' + fragShader;
         this.uniformDefaults = uniformDefaults;
+        this._tintAlpha = new Float32Array(4);
     };
     ShaderPlugin.prototype = Object.create(PIXI.ObjectRenderer.prototype);
     ShaderPlugin.prototype.constructor = ShaderPlugin;
 
-    ShaderPlugin.prototype.onContextChange = function () {
+    ShaderPlugin.prototype._initShader = function () {
         var gl = this.renderer.gl;
-        this._tintAlpha = new Float32Array(4);
 
         var shader = this.shader = new PIXI.Shader(gl, this.vertShader, this.fragShader);
         if (this.uniformDefaults) {
@@ -46,11 +46,15 @@ function createShaderPlugin (name, vertShader, fragShader, uniformDefaults) {
         this.quad = new PIXI.Quad(gl);
         this.quad.initVao(shader);
     };
-
-    ShaderPlugin.prototype.start = function () {
+    
+    ShaderPlugin.prototype.onContextChange = function () {
+        this._initShader();
     };
 
-    ShaderPlugin.prototype.flush = function () {
+    ShaderPlugin.prototype.start = function () {
+        if (!this.shader) {
+            this._initShader();
+        }
     };
 
     ShaderPlugin.prototype.render = function (sprite) {
@@ -128,7 +132,14 @@ function createShaderPlugin (name, vertShader, fragShader, uniformDefaults) {
         quad.vao.draw(this.renderer.gl.TRIANGLES, 6, 0);
     };
 
+    
     // register plugin
     PIXI.WebGLRenderer.registerPlugin(name, ShaderPlugin);
     PIXI.CanvasRenderer.registerPlugin(name, PIXI.CanvasSpriteRenderer);
+    
+    // update renderer if one was created and passed in by user
+    if (renderer) {
+        renderer.plugins[name] = renderer.type === PIXI.RENDERER_TYPE.WEBGL ?
+            new ShaderPlugin(renderer) : new PIXI.CanvasSpriteRenderer(renderer);
+    }
 }
