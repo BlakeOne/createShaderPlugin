@@ -8,5 +8,8 @@
 ### Documentation ###
 - More coming soon!
 
+### Props/Creds ###
+- Based on [pixi-plugin-example](https://github.com/pixijs/pixi-plugin-example) and [PIXI.Sprite.calculateVertices](https://github.com/pixijs/pixi.js/blob/dev/src/core/sprites/Sprite.js#L170).
+
 ### License ###
 - This content is released under the (http://opensource.org/licenses/MIT) MIT License.
