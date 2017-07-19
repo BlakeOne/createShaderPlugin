@@ -1,3 +1,92 @@
+// wait for DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function () {
+    
+    
+// create the plugins before creating the app/renderer
+createShaderPlugin(
+    'circle',                                           // name
+    document.getElementById('circleVertShader').text,   // vertShader
+    document.getElementById('circleFragShader').text,   // fragShader
+    { uColor: new Float32Array([0.0, 1.0, 0.0, 1.0]) }  // default values
+);
+
+// you can use the default vertShader by passing null
+// you can leave out the default uniform values too
+createShaderPlugin(
+    'rectangle',
+    null,
+    document.getElementById('rectangleFragShader').text
+);
+
+
+// create app/renderer next
+var app = new PIXI.Application({
+    width: window.innerWidth,
+    height: window.innerHeight,
+    antialias: true,
+    autoResize: true,
+    backgroundColor: 0xFFFFFF
+});
+document.body.appendChild(app.view);
+
+
+// create rectangleSprite
+var rectangleSprite = new PIXI.Sprite();
+
+// each uniform has a name and value
+rectangleSprite.pluginUniforms = {
+    uTime: 0.0
+};
+
+// world transform is applied, so E.G. when sprite is scaled 2X then your shader will draw (2 * pluginSize) pixels
+rectangleSprite.pluginSize = new PIXI.Point(app.renderer.width, app.renderer.height);
+
+// the plugin name used here must match the one passed to createShaderPlugin()
+rectangleSprite.pluginName = 'rectangle';
+
+app.stage.addChild(rectangleSprite);
+
+// that's about it -there's just a few more comments towards the top of the HTML tab to tell about uniforms - have fun:)
+
+
+// create circleSprite
+var circleSprite = new PIXI.Sprite();
+circleSprite.anchor.set(0.5);
+circleSprite.position.set(window.innerWidth / 4.0, window.innerHeight / 2.0);
+
+circleSprite.pluginUniforms = {
+    uColor: new Float32Array([0.0, 1.0, 0.0, 1.0])
+};
+circleSprite.pluginSize = new PIXI.Point(100.0, 100.0);
+circleSprite.pluginName = 'circle';
+
+app.stage.addChild(circleSprite);
+
+
+// Animate
+app.ticker.add(function (delta) {
+    rectangleSprite.pluginUniforms.uTime += delta * 16.67;
+    
+    circleSprite.position.x += 1.5 * delta;
+    
+    var inc = 0.003 * delta;
+    circleSprite.pluginUniforms.uColor[0] += inc;
+    circleSprite.pluginUniforms.uColor[1] -= inc;
+    if (circleSprite.pluginUniforms.uColor[0] > 1.0) {
+        circleSprite.pluginUniforms.uColor[0] = 1.0;
+        circleSprite.pluginUniforms.uColor[1] = 0.0;
+    }
+});
+    
+    
+}); // wait for DOMContentLoaded
+
+
+
+
+///////////////////////////
+// createShaderPlugin.js //
+///////////////////////////
 function createShaderPlugin (name, vertShader, fragShader, uniformDefaults) {
     var ShaderPlugin = function (renderer) {
         PIXI.ObjectRenderer.call(this, renderer);
@@ -36,10 +125,10 @@ function createShaderPlugin (name, vertShader, fragShader, uniformDefaults) {
         var shader = this.shader = new PIXI.Shader(gl, this.vertShader, this.fragShader);
         if (this.uniformDefaults) {
             shader.bind();
-            var defaultUniforms = this.uniformDefaults;
+            var uniformDefaults = this.uniformDefaults;
             var shaderUniforms = shader.uniforms;
-            for (var key in defaultUniforms) {
-                shaderUniforms[key] = defaultUniforms[key];
+            for (var key in uniformDefaults) {
+                shaderUniforms[key] = uniformDefaults[key];
             }
         }
 
