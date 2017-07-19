@@ -1,4 +1,4 @@
-function createShaderPlugin(name, vertShader, fragShader, uniformDefaults) {
+function createShaderPlugin (name, vertShader, fragShader, uniformDefaults) {
     var ShaderPlugin = function (renderer) {
         PIXI.ObjectRenderer.call(this, renderer);
 
