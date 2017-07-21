@@ -146,7 +146,7 @@ function createShaderPlugin (name, vertShader, fragShader, uniformDefaults, rend
 
 
 function createShaderPluginSprite(name, size, uniforms) {
-    var sprite = new PIXI.Sprite();
+	var sprite = new PIXI.Sprite();
     
 	sprite.pluginName = name;
 	sprite.pluginSize = size;
