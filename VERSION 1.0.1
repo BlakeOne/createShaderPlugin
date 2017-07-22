@@ -1,1 +1,6 @@
 Version 1.0.1
+
+createShaderPlugin now works even after the renderer/app has been created, by simply passing renderer as the final parameter. If the renderer/app hasn't been created yet then this parameter can be omitted like before. 
+
+There's now a helper function to create a sprite and add all 3 plugin-related properties at once:
+var sprite = createShaderPluginSprite(name, size, uniforms);
