@@ -1,3 +1,10 @@
+/*!
+ * createShaderPlugin.js - v1.0.1
+ * https://github.com/magig/createShaderPlugin
+ *
+ * createShaderPlugin.js is licensed under the MIT License.
+ * http://www.opensource.org/licenses/mit-license
+ */
 function createShaderPlugin (name, vertShader, fragShader, uniformDefaults, renderer) {
     var ShaderPlugin = function (_renderer) {
         PIXI.ObjectRenderer.call(this, _renderer);
