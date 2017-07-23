@@ -157,11 +157,7 @@ function createShaderPluginSprite(name, size, uniforms) {
     
     sprite.pluginName = name;
     sprite.pluginSize = size;
-    sprite.pluginUniforms = {};
-    
-    if (uniforms) {
-        Object.assign(sprite.pluginUniforms, uniforms);
-    }
-    
+    sprite.pluginUniforms = uniforms || {};
+        
     return sprite;
 }
