@@ -77,7 +77,6 @@ function createShaderPlugin (name, vertShader, fragShader, uniformDefaults, rend
 
 
         // calculate and upload vertices
-        sprite._transformID = sprite.transform._worldID;
         var wt = sprite.transform.worldTransform;
         var a = wt.a;
         var b = wt.b;
