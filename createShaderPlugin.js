@@ -72,7 +72,7 @@ function createShaderPlugin (name, vertShader, fragShader, uniformDefaults, rend
             this.shader = null;
         }
         
-        if (this.quad]) {
+        if (this.quad) {
             this.quad.destroy();
             this.quad = null;
         }
