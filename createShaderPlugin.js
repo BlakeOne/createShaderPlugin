@@ -64,6 +64,20 @@ function createShaderPlugin (name, vertShader, fragShader, uniformDefaults, rend
         }
     };
 
+    ShaderPlugin.prototype.destroy = function () {
+        PIXI.ObjectRenderer.prototype.destroy.call(this);
+
+        if (this.shader) {
+            this.shader.destroy();
+            this.shader = null;
+        }
+        
+        if (this.quad]) {
+            this.quad.destroy();
+            this.quad = null;
+        }
+    };
+    
     ShaderPlugin.prototype.render = function (sprite) {
         // setup
         var shader = this.shader;
